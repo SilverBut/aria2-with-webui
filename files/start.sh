@@ -1,4 +1,5 @@
 #!/bin/sh
+umask 002
 if [ ! -f /conf/aria2.conf ]; then
 	cp /conf-copy/aria2.conf /conf/aria2.conf
 	if [ $SECRET ]; then
@@ -12,6 +13,5 @@ fi
 chmod +x /conf/on-complete.sh
 touch /conf/aria2.session
 
-darkhttpd /aria2-webui/docs --port 80 &
-darkhttpd /data --port 8080 &
+darkhttpd /aria2-webui/docs --port 8080 &
 aria2c --conf-path=/conf/aria2.conf

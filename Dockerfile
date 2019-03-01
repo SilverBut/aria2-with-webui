@@ -1,6 +1,6 @@
 FROM alpine:edge
 
-MAINTAINER xujinkai <jack777@xujinkai.net>
+MAINTAINER SilverBut
 
 RUN apk update && \
 	apk add --no-cache --update bash && \
@@ -14,17 +14,20 @@ RUN apk update && \
     apk del git && \
 	apk add --update darkhttpd
 
+RUN chmod +x /conf-copy/start.sh && \
+    groupadd -g 972 app_aria2 && \
+    useradd -r -u 972 -g app_aria2 app_aria2
+USER app_aria2
+
 ADD files/start.sh /conf-copy/start.sh
 ADD files/aria2.conf /conf-copy/aria2.conf
 ADD files/on-complete.sh /conf-copy/on-complete.sh
 
-RUN chmod +x /conf-copy/start.sh
 
 WORKDIR /
 VOLUME ["/data"]
 VOLUME ["/conf"]
 EXPOSE 6800
-EXPOSE 80
 EXPOSE 8080
 
 CMD ["/conf-copy/start.sh"]
